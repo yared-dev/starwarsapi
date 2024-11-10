@@ -1,0 +1,154 @@
+openapi: 3.0.0
+components:
+  schemas:
+    PersonajeInput:
+      type: object
+      properties:
+        nombre:
+          type: string
+        altura:
+          type: string
+        masa:
+          type: string
+        color_cabello:
+          type: string
+        color_piel:
+          type: string
+        color_ojos:
+          type: string
+        ano_nacimiento:
+          type: string
+        genero:
+          type: string
+        mundo_natal:
+          type: string
+        peliculas:
+          type: array
+          items:
+            type: string
+        especies:
+          type: array
+          items:
+            type: string
+        vehiculos:
+          type: array
+          items:
+            type: string
+        naves_estelares:
+          type: array
+          items:
+            type: string
+        creado:
+          type: string
+          format: date-time
+        editado:
+          type: string
+          format: date-time
+        url:
+          type: string
+    PersonajeResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        nombre:
+          type: string
+        altura:
+          type: string
+        masa:
+          type: string
+        color_cabello:
+          type: string
+        color_piel:
+          type: string
+        color_ojos:
+          type: string
+        ano_nacimiento:
+          type: string
+        genero:
+          type: string
+        mundo_natal:
+          type: string
+        peliculas:
+          type: array
+          items:
+            type: string
+        especies:
+          type: array
+          items:
+            type: string
+        vehiculos:
+          type: array
+          items:
+            type: string
+        naves_estelares:
+          type: array
+          items:
+            type: string
+        creado:
+          type: string
+          format: date-time
+        editado:
+          type: string
+          format: date-time
+        url:
+          type: string
+info:
+  title: 'API de Personajes de Star Wars'
+  description: 'API para gestionar personajes de Star Wars utilizando DynamoDB como almacenamiento.'
+  version: '1.0.0'
+paths:
+  /personajes:
+    get:
+      operationId: getPersonajes
+      summary: Obtener personajes
+      description: Obtiene una lista de personajes de Star Wars desde la API externa.
+      responses:
+        '200':
+          description: Lista de personajes obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PersonajeResponse'
+        '500':
+          description: Error al obtener personajes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /personaje:
+    post:
+      operationId: addPersonaje
+      summary: Agregar personaje
+      description: Agrega un personaje a la base de datos DynamoDB.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonajeInput'
+      responses:
+        '200':
+          description: Personaje agregado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Personaje agregado exitosamente"
+        '500':
+          description: Error al agregar personaje
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string

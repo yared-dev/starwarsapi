@@ -1,0 +1,187 @@
+service: starwars-api
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+  environment:
+    SWAPI_URL: https://swapi.dev/api
+    NODE_ENV: development
+    MYSQL_PORT: 3307
+    MYSQL_DATABASE: starwars_db
+    MYSQL_USER: root
+    MYSQL_PASSWORD: root_password_8
+functions:
+  getPersonajes:
+    handler: handler.getPersonajes
+    events:
+      - http:
+          path: personajes
+          method: get
+          cors: true
+          documentation:
+            summary: "Obtener personajes"
+            description: "Obtiene una lista de personajes de Star Wars desde la API externa."
+            requestHeaders:
+              - name: Authorization
+                description: "no requiere"
+            responses:
+              200:
+                description: "Lista de personajes obtenida correctamente"
+                bodyType: PersonajeResponse
+
+  addPersonaje:
+    handler: handler.addPersonaje
+    events:
+      - http:
+          path: personaje
+          method: post
+          cors: true
+          documentation:
+            summary: "Agregar personaje"
+            description: "Agrega un personaje a la base de datos DynamoDB."
+            requestModels:
+              "application/json": PersonajeInput
+            responses:
+              200:
+                description: "Personaje agregado exitosamente"
+              500:
+                description: "Error al agregar el personaje"
+
+  getStoredPersonajes:
+    handler: handler.getStoredPersonajes
+    events:
+      - http:
+          path: personajes/almacenados
+          method: get
+          cors: true
+
+  getPlanets:
+      handler: handler.getPlanets
+      events:
+        - http:
+            path: getPlanets
+            method: get
+            cors: true
+            documentation:
+            summary: "Obtener personajes almacenados"
+            description: "Obtiene personajes almacenados en DynamoDB."
+            responses:
+              200:
+                description: "Personajes obtenidos correctamente"
+              500:
+                description: "Error al obtener personajes almacenados"
+                
+plugins:
+  - serverless-offline
+  - serverless-openapi-documentation
+
+custom:
+  serverless-offline:
+    httpPort: 3000
+  custom:
+  documentation:
+    api:
+      info:
+        version: "1.0.0"
+        title: "Star Wars"
+        description: "API de prueba que utiliza la API de Star Wars y MYSQL"
+    models:
+      - name: PersonajeInput
+        description: "Modelo para crear un personaje"
+        contentType: "application/json"
+        schema:
+          type: object
+          properties:
+            nombre:
+              type: string
+            altura:
+              type: string
+            masa:
+              type: string
+            color_cabello:
+              type: string
+            color_piel:
+              type: string
+            color_ojos:
+              type: string
+            ano_nacimiento:
+              type: string
+            genero:
+              type: string
+            mundo_natal:
+              type: string
+            peliculas:
+              type: array
+              items:
+                type: string
+            especies:
+              type: array
+              items:
+                type: string
+            vehiculos:
+              type: array
+              items:
+                type: string
+            naves_estelares:
+              type: array
+              items:
+                type: string
+            creado:
+              type: string
+              format: date-time
+            editado:
+              type: string
+              format: date-time
+            url:
+              type: string
+      - name: PersonajeResponse
+        description: "Modelo de respuesta para un personaje"
+        contentType: "application/json"
+        schema:
+          type: object
+          properties:
+            id:
+              type: string
+            nombre:
+              type: string
+            altura:
+              type: string
+            masa:
+              type: string
+            color_cabello:
+              type: string
+            color_piel:
+              type: string
+            color_ojos:
+              type: string
+            ano_nacimiento:
+              type: string
+            genero:
+              type: string
+            mundo_natal:
+              type: string
+            peliculas:
+              type: array
+              items:
+                type: string
+            especies:
+              type: array
+              items:
+                type: string
+            vehiculos:
+              type: array
+              items:
+                type: string
+            naves_estelares:
+              type: array
+              items:
+                type: string
+            creado:
+              type: string
+              format: date-time
+            editado:
+              type: string
+              format: date-time
+            url:
+              type: string
