@@ -49,15 +49,15 @@ const translationMap = {
   population: "poblacion",
 };
 
-const translateKeys = (data) => {
-  const translateKey = data.map((element) => {
-    const object2 = Object.fromEntries(
-      Object.entries(element).map(([key, val]) => [translationMap[key], val])
-    );
-    return object2;
-  });
-  return translateKey;
-};
+const translateKeys = (data) =>
+  data.map((element) =>
+    Object.fromEntries(
+      Object.entries(element).map(([key, val]) => [
+        translationMap[key] || key,
+        val,
+      ])
+    )
+  );
 
 module.exports.getPersonajes = async () => {
   try {
